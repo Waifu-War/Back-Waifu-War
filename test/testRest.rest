@@ -1,0 +1,45 @@
+GET http://localhost:3000
+###
+POST http://localhost:3000/waifu
+Content-Type: application/json
+
+{
+    "nickname": "alors1",
+    "firstname": "alors2",
+    "lastname": "alors3",
+    "age": 12,
+    "img": "alors5",
+    "manga": "alors6",
+    "firstIdea": "alors7",
+    "random": "alors"
+}
+###
+POST http://localhost:3000/waifu
+Content-Type: application/json
+
+{
+    "nickname": "alors1",
+    "firstname": "alors2",
+    "lastname": "alors3",
+    "age": "feafe",
+    "img": "alors5",
+    "manga": "alors6",
+    "firstIdea": "alors7",
+    "random": "alors"
+}
+###
+GET http://localhost:3000/waifu
+###
+DELETE http://localhost:3000/waifu/gage
+###
+GET http://localhost:3000/waifu
+###
+GET http://localhost:3000/waifu/7
+###
+PUT http://localhost:3000/waifu/7
+Content-Type: application/json
+
+{
+    "nickname": "alors32",
+    "random": "llll"
+}
