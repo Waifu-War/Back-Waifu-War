@@ -75,4 +75,14 @@ export class WaifuController {
         return (response.status(200).send("Waifu updated"));
     }
 
+    @Post("/:id/points/:amount")
+    async postWaifuPointsById(@Param("id") id: number, @Param("amount") amount: number, @Res() response) {
+        let result = await this.waifuService.addWaifuPoints(id, amount);
+
+        if (result == false) {
+            return (response.status(203).send("Not authorized"));
+        }
+        return (response.status(200).send("Points added"));
+    }
+
 }

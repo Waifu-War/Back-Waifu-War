@@ -16,7 +16,7 @@ export class WaifuService {
     //Voici une liste des champs qui sont obligatoire pour la création d'une waifu
     mandatoryKeys: Array<string> = ["nickname", "firstname", "lastname", "age", "img", "manga", "firstIdea"];
     //Voici une liste des champs autorisés
-    possibleKeys: Array<string> = ["nickname", "lastname", "firstname", "age", "img", "manga", "gradeAverage", "nbLikes", "leaderboard", "firstIdea", "atk", "life", "def", "speed", "mana", "luck"]
+    possibleKeys: Array<string> = ["nickname", "lastname", "firstname", "age", "img", "manga", "gradeAverage", "nbLikes", "leaderboard", "firstIdea", "atk", "life", "def", "speed", "mana", "luck", "points"]
 
     /*
     ** Méthode de création de waifu, permet de vérifier toutes les informations et
@@ -124,12 +124,12 @@ export class WaifuService {
     **  - Vérification que l'id soit bien un int
     ** Retour:
     **  - Waifu si une waifu est associé a l'id
-    **  - null si la waifu n'existe pas ou bien que l'id ne soit pas un int
+    **  - undefined si la waifu n'existe pas ou bien que l'id ne soit pas un int
     */
     async getWaifuById(id: number) {
         //Vérification que l'id est un int
         if (isNaN(id)) {
-            return (false);
+            return (undefined);
         }
         return (await this.waifuRepository.findOne(id));
     }
@@ -187,6 +187,40 @@ export class WaifuService {
                 firstIdea: tag
             }
         }));
+    }
+
+    /*
+    ** Méthode permettant d'ajouter des points à une waifu
+    ** Paramètres:
+    **  - id: id de la waifu dont on doit ajouter les points
+    **  - amount: montant des points à ajouter
+    ** Sécurité:
+    **  - Vérification que l'id soit un nombre
+    **  - Vérification que l'amount soit un nombre
+    **  - Vérification que l'id soit associé à une waifu
+    ** Retour:
+    **  - false: si jamais un problème existe
+    **  - true: si tout se passe bien
+    */
+    async addWaifuPoints(id: number, amount: number) {
+        //Vérification que l'id soit un nombre
+        if (isNaN(id)) {
+            return (false);
+        }
+        //Vérification que l'amount soit un nombre
+        if (isNaN(amount)) {
+            return (false);
+        }
+        //Vérification que l'id soit associé à une waifu
+        let waifu = await this.getWaifuById(id);
+        if (waifu == undefined) {
+            return (false);
+        }
+        //Ajout des points dans la waifu
+        await this.waifuRepository.update(id, {
+            points: +waifu.points + +amount
+        });
+        return (true);
     }
 
 }

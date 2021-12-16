@@ -12,14 +12,15 @@ export interface WaifuDto {
     nbLikes: number
     leaderboard: number // place dans le classement de la waifuisation
     firstIdea: string // mec qui a eu l'idée de le rajouter
+    points: number
 
     //Waifu Statistics
-    atk: number,
-    life: number,
-    def: number,
-    speed: number,
-    mana: number,
-    luck: number,
+    atk: number
+    life: number
+    def: number
+    speed: number
+    mana: number
+    luck: number
 
     readonly creationDate: Date // date d'ajout
 

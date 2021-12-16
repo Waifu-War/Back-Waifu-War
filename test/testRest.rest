@@ -10,7 +10,7 @@ Content-Type: application/json
     "age": 12,
     "img": "alors5",
     "manga": "alors6",
-    "firstIdea": "alors7",
+    "firstIdea": null,
     "random": "alors"
 }
 ###
@@ -70,3 +70,5 @@ GET http://localhost:3000/user/2
 DELETE http://localhost:3000/user/1
 ###
 GET http://localhost:3000/user/tag/alors7
+###
+POST http://localhost:3000/waifu/1/points/-5

@@ -64,4 +64,7 @@ export class Waifu {
     @Column({default: 0})
     luck: number
 
+    @Column({default: 0})
+    points: number
+
 }
