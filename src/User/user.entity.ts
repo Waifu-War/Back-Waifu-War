@@ -1,5 +1,4 @@
-import { WaifuCreated } from "src/waifuCreated/waifuCreated.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("User")
 export class User {
@@ -16,13 +15,10 @@ export class User {
     @Column()
     grade: string
 
-    @Column()
+    @Column({nullable: true})
     startDate: Date
 
-    @Column()
+    @Column({default: 0})
     nbWaifuCreated: number
-
-    @OneToMany(() => WaifuCreated, waifuCreated => waifuCreated.user)
-    waifuCreated: WaifuCreated[]
 
 }

@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from 'src/User/user.service';
 import { Repository } from 'typeorm';
 import { WaifuDto } from './waifu.DTO';
 import { Waifu } from './waifu.entity';
@@ -9,15 +10,16 @@ export class WaifuService {
 
     constructor(
         @InjectRepository(Waifu) private readonly waifuRepository: Repository<Waifu>,
+        @Inject(forwardRef(() => UserService)) private readonly userService: UserService
     ) {}
 
     //Voici une liste des champs qui sont obligatoire pour la création d'une waifu
-    mandatoryKeys: Array<String> = ["nickname", "firstname", "lastname", "age", "img", "manga", "firstIdea"];
+    mandatoryKeys: Array<string> = ["nickname", "firstname", "lastname", "age", "img", "manga", "firstIdea"];
     //Voici une liste des champs autorisés
-    possibleKeys: Array<String> = ["nickname", "lastname", "firstname", "age", "img", "manga", "gradeAverage", "nbLikes", "leaderboard", "firstIdea", "atk", "life", "def", "speed", "mana", "luck"]
+    possibleKeys: Array<string> = ["nickname", "lastname", "firstname", "age", "img", "manga", "gradeAverage", "nbLikes", "leaderboard", "firstIdea", "atk", "life", "def", "speed", "mana", "luck"]
 
     /*
-    ** Route de création de waifu, permet de vérifier toutes les informations et
+    ** Méthode de création de waifu, permet de vérifier toutes les informations et
     ** de vérifier la sécurité des informations.
     ** Paramètre:
     **  - waifuDto paramètres envoyé dans la requète
@@ -25,20 +27,20 @@ export class WaifuService {
     **  - Vérification de la présence des champs de this.mandatoryKeys
     **  - Suppression des champs qui ne sont pas présents dans l'object
     **  - Vérification que le champs age est un nombre  
+    **  - Vérification que le tag existe bien, si ce n'est pas le cas le tag dans le firstIdea sera null
     ** Retour:
     **  - false si jamais il y a un problème dans les données
     **  - true si tout se passe bien
     */
     async createWaifu(waifuDto: WaifuDto) {
-        console.log(waifuDto);
         //Vérification des clés obligatoires
         for (let key in this.mandatoryKeys) {
-            if (!(key in this.mandatoryKeys)) {
+            if (!Object.keys(waifuDto).includes(this.mandatoryKeys[key])) {
                 return (false);
             }
         }
         //Suppression des clés inutiles
-        for (let key in waifuDto) {
+        for (let key in Object.keys(waifuDto)) {
             if (!this.possibleKeys.includes(key)) {
                 delete waifuDto[key];
             }
@@ -47,8 +49,13 @@ export class WaifuService {
         if (isNaN(waifuDto.age)) {
             return (false);
         }
+        //Vérification que le tag existe
+        let user = await this.userService.getUserByTag(waifuDto.firstIdea);
+        if (user == undefined) {
+            waifuDto.firstIdea = null;
+        }
         //Création de l'objet dans la db
-        this.waifuRepository.save(waifuDto).then();
+        await this.waifuRepository.save(waifuDto);
         return (true);
     }
 
@@ -95,7 +102,7 @@ export class WaifuService {
     }
 
     /*
-    ** Route permettant d'avoir tout les waifu existante
+    ** Méthode permettant d'avoir tout les waifu existante
     */
     async getAllWaifu() {
         let waifuList = await this.waifuRepository.find();
@@ -104,7 +111,7 @@ export class WaifuService {
     }
 
     /*
-    ** Route permettant d'avoir une waifu via son id
+    ** Méthode permettant d'avoir une waifu via son id
     ** Sécurité:
     **  - Vérification que l'id soit bien un int
     ** Retour:
@@ -120,7 +127,7 @@ export class WaifuService {
     }
 
     /*
-    ** Route permettant de modifier une waifu via son id
+    ** Méthode permettant de modifier une waifu via son id
     ** Sécurité:
     **  - Vérification que l'id soit bien un int
     **  - Suppression des clés inutiles
@@ -129,7 +136,7 @@ export class WaifuService {
     **  - false si jamais un problème existe dans la requete
     **  - true si jamais tout s'est bien passé
     */
-   async putWaifuById(id: number, waifuDto: WaifuDto) {
+    async putWaifuById(id: number, waifuDto: WaifuDto) {
         //Vérification que l'id soit un int
         if (isNaN(id)) {
             return (false);
@@ -148,6 +155,15 @@ export class WaifuService {
         }
         await this.waifuRepository.update(id, waifuDto);
         return (true);
-   }
+    }
+
+    /*
+    ** Méhtode permettant de supprimer tout les champs contenant le tag d'un user
+    ** Paramètres:
+    **  - tag: tag de l'user qu'on veux supprimer
+    */
+    async deleteWaifuTag(tag: string) {
+        await this.waifuRepository.query(`UPDATE Waifu SET firstIdea=NULL WHERE firstIdea='${tag}'`)
+    }
 
 }

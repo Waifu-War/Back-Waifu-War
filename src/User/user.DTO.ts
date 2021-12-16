@@ -1,4 +1,4 @@
-export interface User {
+export interface UserDto {
 
     readonly id: number
     userName: string

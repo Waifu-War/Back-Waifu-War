@@ -34,7 +34,7 @@ DELETE http://localhost:3000/waifu/gage
 ###
 GET http://localhost:3000/waifu
 ###
-GET http://localhost:3000/waifu/7
+GET http://localhost:3000/waifu/2
 ###
 PUT http://localhost:3000/waifu/7
 Content-Type: application/json
@@ -43,3 +43,28 @@ Content-Type: application/json
     "nickname": "alors32",
     "random": "llll"
 }
+###
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+    "userName": "username",
+    "tag": "alors7",
+    "grade": "grade",
+    "random": "alors"
+}
+###
+GET http://localhost:3000/user
+###
+PUT http://localhost:3000/user/2
+Content-Type: application/json
+
+{
+    "userName": "changedName",
+    "uselessName": "oiza'heg",
+    "tag": "tag changed"
+}
+###
+GET http://localhost:3000/user/2
+###
+DELETE http://localhost:3000/user/1

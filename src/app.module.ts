@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Waifu } from './waifu/waifu.entity';
 import { WaifuModule } from './waifu/waifu.module';
 import { UserModule } from './User/user.module';
-import { WaifuCreatedModule } from './waifuCreated/waifuCreated.module';
 
 @Module({
     imports: [
@@ -21,8 +20,7 @@ import { WaifuCreatedModule } from './waifuCreated/waifuCreated.module';
             autoLoadEntities: true
         }),
         WaifuModule,
-        UserModule,
-        WaifuCreatedModule
+        UserModule  
     ],
     controllers: [AppController],
     providers: [AppService],

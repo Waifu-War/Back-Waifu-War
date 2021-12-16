@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
-import { response } from 'express';
 import { WaifuDto } from './waifu.DTO';
 import { WaifuService } from './waifu.service';
 

@@ -1,6 +1,5 @@
-import { WaifuCreated } from 'src/waifuCreated/waifuCreated.entity';
+import { User } from 'src/User/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { WaifuDto } from './waifu.DTO';
 
 @Entity("Waifu")
 export class Waifu {
@@ -41,7 +40,7 @@ export class Waifu {
     @Column({default: 0})
     leaderboard: number // place dans le classement de la waifuisation
 
-    @Column()
+    @Column({nullable: true})
     firstIdea: string // mec qui a eu l'idée de le rajouter
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
@@ -64,10 +63,5 @@ export class Waifu {
 
     @Column({default: 0})
     luck: number
-
-    @OneToMany(() => WaifuCreated, created => created.waifu, {
-        nullable: false
-    })
-    created: WaifuCreated[]
 
 }
