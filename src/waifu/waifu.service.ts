@@ -28,6 +28,7 @@ export class WaifuService {
     **  - Suppression des champs qui ne sont pas présents dans l'object
     **  - Vérification que le champs age est un nombre  
     **  - Vérification que le tag existe bien, si ce n'est pas le cas le tag dans le firstIdea sera null
+    **  - Vérification que l'user n'as pas créer plus de 3 waifus
     ** Retour:
     **  - false si jamais il y a un problème dans les données
     **  - true si tout se passe bien
@@ -53,6 +54,13 @@ export class WaifuService {
         let user = await this.userService.getUserByTag(waifuDto.firstIdea);
         if (user == undefined) {
             waifuDto.firstIdea = null;
+        }
+        //Vérification que l'user n'as pas créer plus de 3 waifus2
+        if (waifuDto.firstIdea != null) {
+            let waifuList: Array<WaifuDto> = await this.getAllWaifuByTag(user.tag);
+            if (waifuList.length >= 3) {
+                return (false);
+            }
         }
         //Création de l'objet dans la db
         await this.waifuRepository.save(waifuDto);
@@ -164,6 +172,21 @@ export class WaifuService {
     */
     async deleteWaifuTag(tag: string) {
         await this.waifuRepository.query(`UPDATE Waifu SET firstIdea=NULL WHERE firstIdea='${tag}'`)
+    }
+
+    /*
+    ** Méthode permettant de lister toutes les waifus via son tag
+    ** Paramètres:
+    **  - tag : tag de l'utilisateur
+    ** Retour:
+    **  Array<WaifuDto> : liste des waifus correspondantes
+    */
+    async getAllWaifuByTag(tag: string) {
+        return (await this.waifuRepository.find({
+            where: {
+                firstIdea: tag
+            }
+        }));
     }
 
 }

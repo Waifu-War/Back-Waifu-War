@@ -129,21 +129,41 @@ export class UserService {
     **  - false si jamais un problème est détecté
     **  - true si jamais l'user est détruit
     */
-   async deleteUserById(id: number) {
-       //Vérification que l'id soit un nombre
-       if (isNaN(id)) {
-           return (false);
-       }
-       //Vérification que l'id est associé a un user
-       let user = await this.getUserById(id);
-       if (user == undefined) {
-           return (false);
-       }
-       //Suppression de l'user
-       await this.userRepository.delete(id);
-       //Supression des champs associés
-       await this.waifuService.deleteWaifuTag(user.tag);
-       return (true);
-   }
+    async deleteUserById(id: number) {
+        //Vérification que l'id soit un nombre
+        if (isNaN(id)) {
+            return (false);
+        }
+        //Vérification que l'id est associé a un user
+        let user = await this.getUserById(id);
+        if (user == undefined) {
+            return (false);
+        }
+        //Suppression de l'user
+        await this.userRepository.delete(id);
+        //Supression des champs associés
+        await this.waifuService.deleteWaifuTag(user.tag);
+        return (true);
+    }
+
+    /*
+    ** Méthode permettant d'obtenir le nombre de waifu créer par un utilisateur via son tag
+    ** Paramètres :
+    **  - tag: tag de l'user dont on veux la limite
+    ** Sécurité:
+    **  - Vérification que le tag est bien associé à un user
+    ** Retour:
+    **  - -1 si un problème est présent
+    **  - le nombre de waifu créer par le user
+    */
+    async getUserWaifuNb(tag: string) {
+        //Vérification de l'existence de l'user
+        let user: UserDto = await this.getUserByTag(tag);
+        if (user == undefined) {
+            return (-1);
+        }
+        //Get waifu list by tag
+        return (await this.waifuService.getAllWaifuByTag(tag));
+    }
 
 }
