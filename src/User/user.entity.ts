@@ -9,7 +9,7 @@ export class User {
     @Column()
     userName: string
 
-    @Column()
+    @Column({unique: true})
     tag: string
 
     @Column()

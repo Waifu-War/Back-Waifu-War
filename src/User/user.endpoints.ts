@@ -57,4 +57,14 @@ export class UserController {
         return (response.status(200).send("User deleted"));
     }
 
+    @Get("/tag/:tag")
+    async getUserByTag(@Param("tag") tag: string, @Res() response) {
+        let user = await this.userService.getUserByTag(tag);
+
+        if (user == undefined) {
+            return (response.status(203).send("Not authorized"));
+        }
+        return (response.status(200).send(user));
+    }
+
 }

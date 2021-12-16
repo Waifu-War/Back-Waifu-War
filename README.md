@@ -16,3 +16,5 @@
         - GET : permet d'obtenir l'user associé à l'id
         - PUT : permet de modifier l'user associé à l'id
         - DELETE : permet de supprimer la waifu associé à l'id
+    - /:tag
+        - GET : permet d'obternir l'user associé au tag

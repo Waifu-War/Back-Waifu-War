@@ -51,19 +51,20 @@ export class UserService {
     **  - UserDto si jamais l'utilisateur existe
     **  - undefined si jamais l'utilisateur n'existe pas
     */
-   async getUserByTag(tag: string) {
-       return (await this.userRepository.findOne({
-           where: {
-               tag: tag
-           }
-       }));
-   }
+    async getUserByTag(tag: string) {
+        return (await this.userRepository.findOne({
+            where: {
+                tag: tag
+            }
+        }));
+    }
 
     /*
     ** Permet de créer un utilisateur
     ** Sécurité:
     **  - Vérification des champs obligatoires
     **  - Suppression des champs inutiles
+    **  - Vérification que le tag n'est pas dupliqué
     ** Retour:
     **  - true si jamais l'user est créer
     **  - false si jamais l'user n'est pas créer
@@ -80,6 +81,10 @@ export class UserService {
             if (!this.possibleKeys.includes(Object.keys(userDto)[key])) {
                 delete userDto[Object.keys(userDto)[key]];
             }
+        }
+        //Suppression que le tag n'est pas dupliqué$
+        if (await this.getUserByTag(userDto.tag) != undefined) {
+            return (false);
         }
         //Création de l'user en db
         return (await this.userRepository.save(userDto));
