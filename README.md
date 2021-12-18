@@ -18,3 +18,11 @@
         - DELETE : permet de supprimer la waifu associé à l'id
     - /:tag
         - GET : permet d'obternir l'user associé au tag
+- /userGrade
+    - /
+        - GET : Obtient tout les grades existants
+        - POST : permet de crér un grade
+    - /:name
+        - GET : Permet d'obtenir le grade associé au nom
+        - PUT : Permet de modifier le grade associé au nom
+        - DELETE : Permet de supprimer le grade associé au nom

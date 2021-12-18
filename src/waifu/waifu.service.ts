@@ -1,6 +1,8 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/User/user.service';
+import { UserGradeDTO } from 'src/userGrades/userGrade.DTO';
+import { UserGradeService } from 'src/userGrades/userGrade.service';
 import { Repository } from 'typeorm';
 import { WaifuDto } from './waifu.DTO';
 import { Waifu } from './waifu.entity';
@@ -10,7 +12,8 @@ export class WaifuService {
 
     constructor(
         @InjectRepository(Waifu) private readonly waifuRepository: Repository<Waifu>,
-        @Inject(forwardRef(() => UserService)) private readonly userService: UserService
+        @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
+        @Inject(forwardRef(() => UserGradeService)) private readonly userGradeService: UserGradeService
     ) {}
 
     //Voici une liste des champs qui sont obligatoire pour la création d'une waifu
@@ -28,7 +31,7 @@ export class WaifuService {
     **  - Suppression des champs qui ne sont pas présents dans l'object
     **  - Vérification que le champs age est un nombre  
     **  - Vérification que le tag existe bien, si ce n'est pas le cas le tag dans le firstIdea sera null
-    **  - Vérification que l'user n'as pas créer plus de 3 waifus
+    **  - Vérification que l'user peux créer sa waifu (vérification faites grâce à son grade)
     ** Retour:
     **  - false si jamais il y a un problème dans les données
     **  - true si tout se passe bien
@@ -58,7 +61,8 @@ export class WaifuService {
         //Vérification que l'user n'as pas créer plus de 3 waifus2
         if (waifuDto.firstIdea != null) {
             let waifuList: Array<WaifuDto> = await this.getAllWaifuByTag(user.tag);
-            if (waifuList.length >= 3) {
+            let userGrade: UserGradeDTO = await this.userGradeService.getGradeByName(user.grade);
+            if (waifuList.length >= userGrade.nbWaifuCreate) {
                 return (false);
             }
         }

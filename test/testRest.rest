@@ -1,4 +1,4 @@
-GET http://localhost:3000
+GET http://localhost:3000/waifu
 ###
 POST http://localhost:3000/waifu
 Content-Type: application/json
@@ -10,7 +10,7 @@ Content-Type: application/json
     "age": 12,
     "img": "alors5",
     "manga": "alors6",
-    "firstIdea": null,
+    "firstIdea": "alors7",
     "random": "alors"
 }
 ###
@@ -36,12 +36,11 @@ GET http://localhost:3000/waifu
 ###
 GET http://localhost:3000/waifu/2
 ###
-PUT http://localhost:3000/waifu/7
+PUT http://localhost:3000/waifu/1
 Content-Type: application/json
 
 {
-    "nickname": "alors32",
-    "random": "llll"
+    "points": 10
 }
 ###
 POST http://localhost:3000/user
@@ -72,3 +71,20 @@ DELETE http://localhost:3000/user/1
 GET http://localhost:3000/user/tag/alors7
 ###
 POST http://localhost:3000/waifu/1/points/-5
+###
+GET http://localhost:3000/userGrade
+###
+POST http://localhost:3000/userGrade
+Content-Type: application/json
+
+{
+    "name": "grade",
+    "nbWaifuCreate": 3
+}
+###
+PUT http://localhost:3000/userGrade/grade
+Content-Type: application/json
+
+{
+    "nbWaifuCreate": 5
+}

@@ -4,6 +4,7 @@ import { WaifuService } from './waifu.service';
 
 @Controller("waifu")
 export class WaifuController {
+
     constructor(private readonly waifuService: WaifuService) {}
 
     @Get()
