@@ -67,4 +67,10 @@ export class Waifu {
     @Column({default: 0})
     points: number
 
+    @Column({default: 0})
+    Nbsub: number
+
+    @Column({default: 0})
+    Nbmessage: number
+
 }

@@ -13,6 +13,8 @@ export interface WaifuDto {
     leaderboard: number // place dans le classement de la waifuisation
     firstIdea: string // mec qui a eu l'idée de le rajouter
     points: number
+    Nbsub: number
+    Nbmessage: number
 
     //Waifu Statistics
     atk: number
